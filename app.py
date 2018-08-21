@@ -1,4 +1,4 @@
-from flask import Flask, render_template_string, render_template
+from flask import Flask, render_template_string, render_template, abort
 
 app = Flask(__name__)
 
@@ -41,6 +41,15 @@ def authors():
     return render_template('/authors_list.html')
 
 
-@app.route('/authors/<author_name>')
+@app.route('/authors/<string:author_name>')
 def author_info(author_name):
+    if author_name not in AUTHOR_DATA:
+        abort(404)
     return render_template('author_info.html', author=AUTHOR_DATA[author_name])
+
+
+@app.errorhandler(404)
+def not_found(error):
+    # Ideally you should render some custom template here like this:
+    # return render_template('/custom_404.html'), 404
+    return 'Page not found.'
