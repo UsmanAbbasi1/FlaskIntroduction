@@ -1,6 +1,20 @@
 from flask import Flask, render_template_string, render_template, abort, redirect, url_for
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://usman:arbiarbi@localhost/flask_intro'
+db = SQLAlchemy(app)
+
+
+# Run this line in python shell to create all tables
+# db.create_all()
+
+
+class Country(db.Model):
+    __tablename__ = 'Country'
+    id = db.Column('id', db.Integer, primary_key=True)
+    name = db.Column('name', db.VARCHAR)
+
 
 AUTHOR_DATA = {
     'Poe': {'name': 'Poe', 'age': 50},
@@ -56,6 +70,17 @@ def info():
 @app.route('/request_info')
 def request_info():
     return render_template('request_info.html')
+
+
+@app.route('/countries')
+def countries_info():
+    countries = Country.query.all()
+    return render_template('countries_info.html', countries=countries)
+
+
+@app.before_request
+def before_request():
+    print('before request called')
 
 
 @app.errorhandler(404)
