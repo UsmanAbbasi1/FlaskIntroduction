@@ -1,4 +1,4 @@
-from flask import Flask, render_template_string, render_template, abort
+from flask import Flask, render_template_string, render_template, abort, redirect, url_for
 
 app = Flask(__name__)
 
@@ -38,7 +38,7 @@ def index():
 
 @app.route('/authors/list')
 def authors():
-    return render_template('/authors_list.html')
+    return render_template('authors_list.html')
 
 
 @app.route('/authors/<string:author_name>')
@@ -46,6 +46,16 @@ def author_info(author_name):
     if author_name not in AUTHOR_DATA:
         abort(404)
     return render_template('author_info.html', author=AUTHOR_DATA[author_name])
+
+
+@app.route('/info')
+def info():
+    return redirect(url_for('request_info'), code=301)
+
+
+@app.route('/request_info')
+def request_info():
+    return render_template('request_info.html')
 
 
 @app.errorhandler(404)

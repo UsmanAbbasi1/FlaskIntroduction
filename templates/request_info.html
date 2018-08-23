@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Request Info</title>
+</head>
+<body>
+    {% for name,value in request.headers %}
+        <strong>{{name}}:</strong>
+        <p>{{value}}</p>
+    {% endfor %}
+</body>
+</html>
