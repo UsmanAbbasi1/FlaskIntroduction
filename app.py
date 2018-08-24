@@ -58,11 +58,6 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/authors/list')
-def authors():
-    return render_template('authors_list.html')
-
-
 @app.route('/authors/<string:author_name>')
 def author_info(author_name):
     author = Author.query.filter_by(name=author_name)
