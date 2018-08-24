@@ -1,4 +1,4 @@
-from flask import Flask, render_template_string, render_template, abort, redirect, url_for
+from flask import Flask, render_template_string, render_template, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -11,8 +11,16 @@ db = SQLAlchemy(app)
 
 
 class Country(db.Model):
-    __tablename__ = 'Country'
+    __tablename__ = 'country'
     id = db.Column('id', db.Integer, primary_key=True)
+    name = db.Column('name', db.VARCHAR)
+    author = db.relationship('Author', backref='country', cascade='all, delete-orphan', lazy='dynamic')
+
+
+class Author(db.Model):
+    __tablename__ = 'author'
+    id = db.Column('id', db.Integer, primary_key=True)
+    country_id = db.Column(db.Integer, db.ForeignKey('country.id'))
     name = db.Column('name', db.VARCHAR)
 
 
@@ -57,9 +65,8 @@ def authors():
 
 @app.route('/authors/<string:author_name>')
 def author_info(author_name):
-    if author_name not in AUTHOR_DATA:
-        abort(404)
-    return render_template('author_info.html', author=AUTHOR_DATA[author_name])
+    author = Author.query.filter_by(name=author_name)
+    return render_template('author_info.html', authors=author)
 
 
 @app.route('/info')
@@ -72,10 +79,10 @@ def request_info():
     return render_template('request_info.html')
 
 
-@app.route('/countries')
-def countries_info():
-    countries = Country.query.all()
-    return render_template('countries_info.html', countries=countries)
+@app.route('/authors')
+def authors_info():
+    authors = Author.query.all()
+    return render_template('author_info.html', authors=authors)
 
 
 @app.before_request

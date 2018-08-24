@@ -2,11 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Author</title>
+    <title>Authors</title>
 </head>
 <body>
-    Name: {{author.name}}
-    <br>
-    Age: {{author.age}}
+    <ul>
+        {% for author in authors %}
+            <li>id:{{ author.id }}</li>
+            <li>name:{{ author.name }}</li>
+            <li>country: {{ author.country.name }}</li>
+            <br>
+        {% endfor %}
+    </ul>
 </body>
 </html>
