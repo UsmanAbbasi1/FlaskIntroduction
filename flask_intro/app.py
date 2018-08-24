@@ -6,26 +6,14 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://usman:arbiarbi@localhost/flask_intro'
 db = SQLAlchemy(app)
 
-
 # Run this line in python shell to create all tables
 # db.create_all()
 
-
-class Country(db.Model):
-    """Model for storing countries"""
-    __tablename__ = 'country'
-    id = db.Column('id', db.Integer, primary_key=True)
-    name = db.Column('name', db.VARCHAR)
-    author = db.relationship('Author', backref='country', cascade='all, delete-orphan', lazy='dynamic')
-
-
-class Author(db.Model):
-    """Model for storing authors"""
-    __tablename__ = 'author'
-    id = db.Column('id', db.Integer, primary_key=True)
-    # Foreign key to country from which author belongs
-    country_id = db.Column(db.Integer, db.ForeignKey('country.id'))
-    name = db.Column('name', db.VARCHAR)
+# This should be imported after initializing 'db' object to avoid circular import
+# Same should be done in terminal if we want to import something from models:
+# 1: from flask_intro.app import db
+# 2: from flask_intro.models import *
+from .models import Author, Country
 
 
 @app.route('/')
