@@ -1,4 +1,4 @@
-from flask import Flask, render_template_string, render_template, redirect, url_for
+from flask import Flask, render_template_string, render_template, redirect, url_for, request
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -83,6 +83,16 @@ def request_info():
 def authors_info():
     authors = Author.query.all()
     return render_template('author_info.html', authors=authors)
+
+
+@app.route('/countries', methods=['POST', 'GET'])
+def countries():
+    if request.method == 'GET':
+        return render_template('forms/country_form.html')
+    elif request.method == 'POST':
+        db.session.add(Country(name=request.form['name']))
+        db.session.commit()
+        return 'Successfully added new country!'
 
 
 @app.before_request

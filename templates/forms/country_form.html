@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Country</title>
+</head>
+<body>
+    {# Example to serve static files #}
+    <img src="{{ url_for('static',filename='title.jpeg') }}"/>
+    <h1>Add new country:</h1>
+        <form action="" method="POST">
+            <label for="name">Name</label>
+            <input name="name" placeholder="Country Name" required="True">
+            <button type="submit">Submit</button>
+        </form>
+</body>
+</html>
